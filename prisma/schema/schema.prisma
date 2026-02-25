@@ -12,4 +12,5 @@ previewFeatures = ["driverAdapters", "prismaSchemaFolder"]
 
 datasource db {
   provider = "postgresql"
+  
 }

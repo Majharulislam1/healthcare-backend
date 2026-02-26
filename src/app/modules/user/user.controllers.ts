@@ -7,7 +7,7 @@ import sendResponse from "../../shared/sendResponse";
 
 
 const createUserControllers = catchAsync(async (req: Request, res: Response) => {
-       const result = await userService.createPaeitentService(req.body);
+       const result = await userService.createPaeitentService(req);
        
        sendResponse(res,{
              statusCode:201,

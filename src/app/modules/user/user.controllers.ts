@@ -23,11 +23,12 @@ const getallUserControllers = catchAsync(async (req: Request, res: Response) => 
 
     const limit = req.query.limit;
     const page = req.query.page;
+    const searchTram = req.query.searchTram;
 
 
-    const result = await userService.getallUserService({limit:Number(limit),page:Number(page)});
+    const result = await userService.getallUserService({limit:Number(limit),page:Number(page),searchTram});
 
-
+   
 
 
     sendResponse(res, {

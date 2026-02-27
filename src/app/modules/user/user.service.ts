@@ -37,14 +37,28 @@ const createPaeitentService = async (req: Request) => {
 
 
 
-const getallUserService = async ({limit,page}:{limit:number,page:number}) => {
+const getallUserService = async ({limit,page,searchTram}:{limit:number,page:number,searchTram?:any}) => {
 
-    const skip = (page -1 ) * limit;
+    const pageNumber = page || 1;
+    const limitNumber = limit || 10;
+   
+ 
+     
+
+    const skip = (pageNumber -1 ) * limitNumber;
+   
     
      const allUser = await prisma.user.findMany(
         {
              skip,
-             take:limit
+             take:limit,
+
+             where:{
+                  email:{
+                     contains:searchTram,
+                     mode:'insensitive'
+                  }
+             }
         }
      );
      

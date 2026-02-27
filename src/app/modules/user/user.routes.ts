@@ -6,6 +6,10 @@ import { UserValidation } from "./user.validation";
 
 export const userRoute = Router();
 
+
+
+userRoute.get('/',UserControllers.getallUserControllers);
+
 userRoute.post('/create-patient',
     fileUploder.upload.single('file'),
 
@@ -13,7 +17,6 @@ userRoute.post('/create-patient',
        req.body = UserValidation.createPatientValidationSchema.parse(JSON.parse(req.body.data))
        return  UserControllers.createUserControllers(req,res,next)
     },
-
-   
 );
+
 

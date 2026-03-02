@@ -37,7 +37,7 @@ const createPaeitentService = async (req: Request) => {
 
 
 
-const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder }: { limit: number, page: number, searchTram?: any, sortBy: any, sortOrder: any }) => {
+const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder ,status,role }: { limit: number, page: number, searchTram?: any, sortBy: any, sortOrder: any , status:any,role:any}) => {
 
     const pageNumber = page || 1;
     const limitNumber = limit || 10;
@@ -60,7 +60,9 @@ const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder }:
                 email: {
                     contains: searchTramDev,
                     mode: 'insensitive'
-                }
+                },
+                status:status,
+                role:role
             },
             orderBy: sortBy && sortOrder ? {
                  [sortBy]:sortOrder

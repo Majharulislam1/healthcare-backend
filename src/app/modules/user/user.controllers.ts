@@ -27,8 +27,11 @@ const getallUserControllers = catchAsync(async (req: Request, res: Response) => 
     const sortBy = req.query.sortBy;
     const sortOrder = req.query.sortOrder;
 
+    const status = req.query.status;
+    const role = req.query.role
 
-    const result = await userService.getallUserService({limit:Number(limit),page:Number(page),searchTram,sortBy,sortOrder});
+
+    const result = await userService.getallUserService({limit:Number(limit),page:Number(page),searchTram,sortBy,sortOrder,status,role});
 
    
 

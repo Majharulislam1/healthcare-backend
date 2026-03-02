@@ -37,38 +37,36 @@ const createPaeitentService = async (req: Request) => {
 
 
 
-const getallUserService = async ({limit,page,searchTram,sortBy,sortOrder}:{limit:number,page:number,searchTram?:any,sortBy:any,sortOrder:any}) => {
+const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder }: { limit: number, page: number, searchTram?: any, sortBy: any, sortOrder: any }) => {
 
     const pageNumber = page || 1;
     const limitNumber = limit || 10;
-   
-    
+    const searchTramDev = searchTram || '';
+
+
+
+
+    const skip = (pageNumber - 1) * limitNumber;
  
 
-    const skip = (pageNumber -1 ) * limitNumber;
-    
-    
-     const allUser = await prisma.user.findMany(
-        {
-             skip,
-             take:limit,
+    console.log('page:',pageNumber , "limitNumber: ", limitNumber , "searchTramDev :", searchTramDev);
 
-             where:{
-                  email:{
-                     contains:searchTram || '',
-                     mode:'insensitive'
-                  }
-             },
-             orderBy:sortBy && sortOrder ? {
-                 [sortBy]:sortOrder
-             }:
-             {
-                cratedAt:'asc'
-             }
+    const allUser = await prisma.user.findMany(
+        {
+            skip,
+            take: limitNumber,
+
+            where: {
+                email: {
+                    contains: searchTramDev,
+                    mode: 'insensitive'
+                }
+            },
+             
         }
-     );
-     
-     return allUser
+    );
+
+    return allUser
 
 }
 

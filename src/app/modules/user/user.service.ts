@@ -49,7 +49,7 @@ const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder ,s
     const skip = (pageNumber - 1) * limitNumber;
  
 
-    console.log('page:',pageNumber , "limitNumber: ", limitNumber , "searchTramDev :", searchTramDev);
+   
 
     const allUser = await prisma.user.findMany(
         {

@@ -62,6 +62,11 @@ const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder }:
                     mode: 'insensitive'
                 }
             },
+            orderBy: sortBy && sortOrder ? {
+                 [sortBy]:sortOrder
+            } : {
+                 cratedAt:'asc'
+            }
              
         }
     );

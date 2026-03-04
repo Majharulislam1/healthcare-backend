@@ -45,9 +45,33 @@ const getallUserControllers = catchAsync(async (req: Request, res: Response) => 
 })
 
 
+const createAdminControllers = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await userService.createAdminService(req);
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: "Admin Created successfuly!",
+        data: result
+    })
+});
+
+const createDoctorControllers = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await userService.createDoctorService(req);
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: "Doctor Created successfuly!",
+        data: result
+    })
+});
+
 
 
 export const UserControllers = {
     createUserControllers,
-    getallUserControllers
+    getallUserControllers,
+    createAdminControllers,
+    createDoctorControllers
 }

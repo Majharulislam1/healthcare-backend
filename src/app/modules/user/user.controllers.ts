@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import catchAsync from "../../shared/catchAsync";
 import { userService } from "./user.service";
 import sendResponse from "../../shared/sendResponse";
+ 
+import { userFilterableFields } from "./user.constant";
+import pick from "../../helpers/pick";
 
 
 
@@ -21,26 +24,22 @@ const createUserControllers = catchAsync(async (req: Request, res: Response) => 
 
 const getallUserControllers = catchAsync(async (req: Request, res: Response) => {
 
-    const limit = req.query.limit;
-    const page = req.query.page;
-    const searchTram = req.query.searchTram;
-    const sortBy = req.query.sortBy;
-    const sortOrder = req.query.sortOrder;
-
-    const status = req.query.status;
-    const role = req.query.role
+    const filters = pick(req.query, userFilterableFields);
+    const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"])
 
 
-    const result = await userService.getallUserService({limit:Number(limit),page:Number(page),searchTram,sortBy,sortOrder,status,role});
 
-   
+    const result = await userService.getallUserService(filters,options);
+
+
 
 
     sendResponse(res, {
         statusCode: 201,
         success: true,
         message: 'User riterive successfully',
-        data: result
+        meta:result.meta,
+        data: result.data
     })
 
 })

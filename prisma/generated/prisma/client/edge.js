@@ -39,12 +39,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.4.1
- * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
+ * Prisma Client JS version: 7.4.2
+ * Query Engine version: 94a226be1cf2967af2541cca5529f0f7ba866919
  */
 Prisma.prismaVersion = {
-  client: "7.4.1",
-  engine: "55ae170b1ced7fc6ed07a15f110549408c501bb3"
+  client: "7.4.2",
+  engine: "94a226be1cf2967af2541cca5529f0f7ba866919"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -189,8 +189,8 @@ const config = {
     "driverAdapters",
     "prismaSchemaFolder"
   ],
-  "clientVersion": "7.4.1",
-  "engineVersion": "55ae170b1ced7fc6ed07a15f110549408c501bb3",
+  "clientVersion": "7.4.2",
+  "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
   "activeProvider": "postgresql",
   "inlineSchema": "enum UserRole {\n  PATIENT\n  DOCTOR\n  ADMIN\n}\n\nenum UserStatus {\n  ACTIVE\n  INACTIVE\n  DELETED\n}\n\nenum Gender {\n  MALE\n  FEMALE\n}\n\n// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"../generated/prisma/client\"\n  previewFeatures = [\"driverAdapters\", \"prismaSchemaFolder\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id                 String     @id @default(uuid())\n  email              String     @unique\n  password           String\n  role               UserRole   @default(PATIENT)\n  needPasswordChange Boolean    @default(true)\n  status             UserStatus @default(ACTIVE)\n  cratedAt           DateTime   @default(now())\n  updatedAt          DateTime   @default(now())\n  admin              Admin?\n  doctor             Doctor?\n  patient            Patient?\n\n  @@map(\"users\")\n}\n\nmodel Admin {\n  id            String   @id @default(uuid())\n  email         String   @unique\n  name          String\n  profilePhoto  String?\n  contactNumber String\n  isDeleted     Boolean  @default(false)\n  cratedAt      DateTime @default(now())\n  updatedAt     DateTime @default(now())\n\n  user User @relation(fields: [email], references: [email])\n\n  @@map(\"admins\")\n}\n\nmodel Doctor {\n  id                  String   @id @default(uuid())\n  name                String\n  email               String   @unique\n  profilePhoto        String?\n  contactNumber       String\n  address             String\n  registrationNumber  String\n  experience          Int      @default(0)\n  gender              Gender\n  appointmentFee      Int\n  qualification       String\n  currentWorkingPlace String\n  designation         String\n  isDeleted           Boolean  @default(false)\n  createdAt           DateTime @default(now())\n  updatedAt           DateTime @updatedAt\n  user                User     @relation(fields: [email], references: [email])\n\n  @@map(\"doctors\")\n}\n\nmodel Patient {\n  id           String   @id @default(uuid())\n  email        String   @unique\n  name         String\n  profilePhoto String?\n  address      String?\n  isDeleted    Boolean  @default(false)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  user         User     @relation(fields: [email], references: [email])\n\n  @@map(\"patients\")\n}\n"
 }

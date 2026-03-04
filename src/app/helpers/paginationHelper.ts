@@ -1,5 +1,5 @@
 
-type IOptions ={
+export type IOptions ={
      page?:number | string,
      limit?:number | string,
       

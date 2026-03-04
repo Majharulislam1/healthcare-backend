@@ -3,6 +3,9 @@ import { prisma } from "../../shared/prisma";
 import { createPaeitent } from "./user.interface"
 import bcrypt from "bcryptjs";
 import { fileUploder } from "../../helpers/fileUploader";
+import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
+import { Prisma } from "../../../../prisma/generated/prisma/client";
+import { userSearchableFields } from "./user.constant";
 
 
 
@@ -37,43 +40,65 @@ const createPaeitentService = async (req: Request) => {
 
 
 
-const getallUserService = async ({ limit, page, searchTram, sortBy, sortOrder ,status,role }: { limit: number, page: number, searchTram?: any, sortBy: any, sortOrder: any , status:any,role:any}) => {
-
-    const pageNumber = page || 1;
-    const limitNumber = limit || 10;
-    const searchTramDev = searchTram || '';
+const getallUserService = async (params: any, options: IOptions) => {
 
 
+    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options);
 
+    const { searchTerm, ...filterData } = params;
 
-    const skip = (pageNumber - 1) * limitNumber;
- 
+    const andConditions: Prisma.UserWhereInput[] = [];
 
-   
+    if (searchTerm) {
+        andConditions.push({
+            OR: userSearchableFields.map(field => ({
+                [field]: {
+                    contains: searchTerm,
+                    mode: "insensitive"
+                }
+            }))
+        })
+    }
+
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.keys(filterData).map(key => ({
+                [key]: {
+                    equals: (filterData as any)[key]
+                }
+            }))
+        })
+    }
+
+    const whereConditions: Prisma.UserWhereInput = andConditions.length > 0 ? {
+        AND: andConditions
+    } : {}
+
 
     const allUser = await prisma.user.findMany(
         {
             skip,
-            take: limitNumber,
+            take: limit,
 
-            where: {
-                email: {
-                    contains: searchTramDev,
-                    mode: 'insensitive'
-                },
-                status:status,
-                role:role
-            },
-            orderBy: sortBy && sortOrder ? {
-                 [sortBy]:sortOrder
-            } : {
-                 cratedAt:'asc'
+            where: whereConditions,
+            orderBy: {
+                [sortBy]: sortOrder
             }
-             
+
         }
     );
 
-    return allUser
+    const total = await prisma.user.count({
+        where: whereConditions
+    });
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: allUser
+    };
 
 }
 

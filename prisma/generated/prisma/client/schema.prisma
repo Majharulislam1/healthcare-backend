@@ -15,6 +15,30 @@ enum Gender {
   FEMALE
 }
 
+model Schedule {
+  id              String            @id @default(uuid())
+  startDateTime   DateTime
+  endDateTime     DateTime
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  doctorSchedules DoctorSchedules[]
+
+  @@map("schedules")
+}
+
+model DoctorSchedules {
+  doctorId   String
+  scheduleId String
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  isBooked   Boolean
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@id([doctorId, scheduleId])
+  @@map("doctor_schedules")
+}
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -80,6 +104,8 @@ model Doctor {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   user                User     @relation(fields: [email], references: [email])
+
+  doctorSchedules DoctorSchedules[]
 
   @@map("doctors")
 }

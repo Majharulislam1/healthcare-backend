@@ -120,6 +120,22 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.ScheduleScalarFieldEnum = {
+  id: 'id',
+  startDateTime: 'startDateTime',
+  endDateTime: 'endDateTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DoctorSchedulesScalarFieldEnum = {
+  doctorId: 'doctorId',
+  scheduleId: 'scheduleId',
+  isBooked: 'isBooked',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -204,6 +220,8 @@ exports.Gender = exports.$Enums.Gender = {
 };
 
 exports.Prisma.ModelName = {
+  Schedule: 'Schedule',
+  DoctorSchedules: 'DoctorSchedules',
   User: 'User',
   Admin: 'Admin',
   Doctor: 'Doctor',

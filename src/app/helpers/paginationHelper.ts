@@ -37,3 +37,4 @@ const calculatePagination = (options:IOptions):IOptionsReturn=>{
 export const paginationHelper = {
      calculatePagination
 }
+

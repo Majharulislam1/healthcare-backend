@@ -2,6 +2,7 @@ import { addHours, addMinutes, format } from "date-fns";
 import { prisma } from "../../shared/prisma";
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { Prisma } from "../../../../prisma/generated/prisma/client";
+import { IJWTPayload } from "../../types/common";
  
  
  
@@ -79,35 +80,39 @@ const createDoctorScheduleService = async(payload:any)=>{
 
 
 
-const schedulesForDoctorService = async(filters:any,options:IOptions)=>{ 
-      const {page,limit,skip,sortBy,sortOrder} = paginationHelper.calculatePagination(options);
+const schedulesForDoctorService= async (
+    user: IJWTPayload,
+    fillters: any,
+    options: IOptions
+) => {
+    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options);
+    const { startDateTime: filterStartDateTime, endDateTime: filterEndDateTime } = fillters;
 
-      const {startDateTime:filterStartDateTime,endDateTime:filterEndDateTime} = filters;
+    const andConditions: Prisma.ScheduleWhereInput[] = [];
 
-      const andConditions : Prisma.ScheduleWhereInput[]=[];
+    if (filterStartDateTime && filterEndDateTime) {
+        andConditions.push({
+            AND: [
+                {
+                    startDateTime: {
+                        gte: filterStartDateTime
+                    }
+                },
+                {
+                    endDateTime: {
+                        lte: filterEndDateTime
+                    }
+                }
+            ]
+        })
+    }
 
-      if(filterStartDateTime && filterEndDateTime){
-           andConditions.push({
-                AND:[
-                      {
-                          startDateTime:{
-                              gte:filterStartDateTime
-                          }
-                      } ,
-                      {
-                         endDateTime:{
-                              lte:filterEndDateTime
-                         }
-                      }  
-                ]
-           })
-      }
-
-        const whereConditions: Prisma.ScheduleWhereInput = andConditions.length > 0 ? {
+    const whereConditions: Prisma.ScheduleWhereInput = andConditions.length > 0 ? {
         AND: andConditions
     } : {}
 
-      const doctorSchedules = await prisma.doctorSchedules.findMany({
+
+    const doctorSchedules = await prisma.doctorSchedules.findMany({
         where: {
             doctor: {
                 email: user.email
@@ -151,8 +156,6 @@ const schedulesForDoctorService = async(filters:any,options:IOptions)=>{
         },
         data: result
     };
-
-
 }
 
 
